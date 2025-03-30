@@ -15,3 +15,6 @@ old
 # DB
 *sqlite
 *db
+
+# Environment config
+.env
