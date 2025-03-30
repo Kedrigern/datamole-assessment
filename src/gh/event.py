@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 import requests
 import requests_cache
 from requests.utils import parse_header_links
-from sqlmodel import SQLModel, Session, create_engine, select
+from sqlmodel import Session, select
 from sqlalchemy.exc import IntegrityError
 from .models import Event
 from src.config import config
@@ -70,24 +70,20 @@ def fetch_repo(repo: str, last: Event = None) -> list[Event]:
     return events
 
 
-def save_to_db(data: dict[str, list[Event]]) -> None:
+def save_to_db(session: Session, data: dict[str, list[Event]]) -> None:
     """
     Save events to database
-    TODO one DB from FastAPI
     """
-    engine = create_engine(f"sqlite:///{config.events_db}.db")
-    SQLModel.metadata.create_all(engine)
-    with Session(engine) as session:
-        for repo in data:
-            for event in data[repo]:
-                try:
-                    session.add(event)
-                except IntegrityError:
-                    print(
-                        f"Integrity error, new data are not saved to DB. {event.type} {event.createted_at}",
-                        file=sys.stderr,
-                    )
-            session.commit()
+    for repo in data:
+        for event in data[repo]:
+            try:
+                session.add(event)
+            except IntegrityError:
+                print(
+                    f"Integrity error, new data are not saved to DB. {event.type} {event.createted_at}",
+                    file=sys.stderr,
+                )
+        session.commit()
 
 
 def proccess_repositories(
@@ -97,7 +93,12 @@ def proccess_repositories(
         config.requests_cache, expire_after=config.expire_after
     )
     for repo in repos:
-        statement = select(Event).order_by(Event.createted_at.desc()).limit(1)
+        statement = (
+            select(Event)
+            .where(Event.repo == repo)
+            .order_by(Event.createted_at.desc())
+            .limit(1)
+        )
         last: Event | None = session.exec(statement).first()
         try:
             events = fetch_repo(repo, last)
@@ -127,13 +128,5 @@ def fetch_gh_to_local_db(session: Session, repo_uri=None) -> dict:
     for repo in result:
         stats[repo] = len(result[repo])
 
-    save_to_db(result)
+    save_to_db(session, result)
     return stats
-
-
-def main() -> None:
-    fetch_gh_to_local_db(True)
-
-
-if __name__ == "__main__":
-    main()
