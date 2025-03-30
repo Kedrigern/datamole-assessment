@@ -37,6 +37,8 @@ There are few **endpoints**:
 
 `/fetch/{org}/{repo}`: Fetches event data specifically for the given repository within the specified organization from the GitHub API and stores it in the local database.
 
+`/stats`: Show number of localy cached event for all cached repository
+
 `/stats/{org}/{repo}/{event_type}`: Calculates and returns the average time difference (in seconds) between consecutive events of the specified `event_type` within the given repository. The calculation is based on the rolling window logic (7 days or 500 events).
 
 ## Architecture
@@ -55,6 +57,7 @@ When you cal `/stats/` the calculation is only from local DB.
 - [ ] More robust fetching of data (I think there is few errors)
 - [ ] More tests
 - [ ] Cron fetching of data
+- [ ] Naming consistency
 
 ---
 
@@ -76,7 +79,10 @@ Be aware that the GitHub API often paginates its responses. When a response is p
 
 ### Datetime
 
-Naive datetime vs proper datetime. SQLite can store as timestamp, but
-SQLAlchemy want datetime field which is without timestamp.
+The application assumes that all datetime information obtained from the GitHub API is in UTC.
 
-Assuming that all data is in UTC.
+There is a distinction between naive and proper datetime objects. SQLite can store datetime information as timestamps, which implicitly include timezone information (typically UTC). However, SQLAlchemy's DateTime field, by default, creates datetime objects that are timezone-naive (i.e., without explicit timezone information).
+
+To bridge this gap and maintain consistency, the application likely converts the timezone-aware datetime objects received from the GitHub API (or those handled internally) to timezone-naive datetime objects before storing them in the database via SQLAlchemy. This relies on the assumption that all times are in UTC.
+
+You might encounter a warning related to naive datetimes when running tests. This often arises when comparing or operating on naive datetime objects with timezone-aware ones. The application attempts to sanitize all occurrences of naive datetimes to ensure consistent behavior, given the UTC assumption.
