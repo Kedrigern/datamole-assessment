@@ -33,7 +33,7 @@ There are few **endpoints**:
 
 `/docs`: Provides access to the interactive **Swagger UI** documentation.
 
-`/fetch`: Fetch data from gh API to local DB
+`/fetch`: Fetch data from gh API to local DB, this funcionality is called periodicaly
 
 `/fetch/{org}/{repo}`: Fetches event data specifically for the given repository within the specified organization from the GitHub API and stores it in the local database.
 

@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     debug: bool = False
 
     expire_after: int = 7200
+    auto_fetch_interval_minutes: int = 5
     base_url: str = "https://api.github.com/repos/"
     end_of_url: str = "/events"
     requests_cache: str

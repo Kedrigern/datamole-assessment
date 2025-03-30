@@ -3,14 +3,18 @@ from fastapi import FastAPI, Depends
 from sqlmodel import Session
 
 from src.config import config
-from src.database.connection import get_session
+from src.database.connection import get_session, create_db_and_tables
 from src.gh.models import Event
 from src.gh.event import fetch_gh_to_local_db
 from src.stats.event import get_stats, fetch_repos, local_cache_stats
+from src.gh.cron import create_scheduler
 
 
 @asynccontextmanager
 async def life_span(_: FastAPI):
+    # start
+    create_db_and_tables()
+    create_scheduler()
     yield
 
 
