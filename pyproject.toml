@@ -1,0 +1,21 @@
+[project]
+name = "datamole-assessment"
+version = "0.1.0"
+description = "Demo application is designed to calculate statistics from the [GitHub Events API"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "pydantic>=2.10.6",
+    "pydantic-settings>=2.8.1",
+    "requests-cache>=1.2.1",
+    "requests>=2.32.3",
+    "sqlmodel>=0.0.24",
+    "fastapi[standard]>=0.115.12",
+]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.15.0",
+    "pytest>=8.3.5",
+    "ruff>=0.11.2",
+]

@@ -1,0 +1,6 @@
+_collapsed
+*.responses.json
+*.messages.json
+.env
+
+Default.json

@@ -1,0 +1,39 @@
+{
+    "_type": "request",
+    "method": "GET",
+    "body": {
+        "mimeType": "No Body"
+    },
+    "url": "https://api.github.com/repos/fastapi/fastapi/events?per_page=2&since=2025-03-01&until=2025-03-01",
+    "sortOrder": 2,
+    "parameters": [
+        {
+            "name": "per_page",
+            "value": "2"
+        },
+        {
+            "name": "since",
+            "value": "2025-03-01"
+        },
+        {
+            "name": "until",
+            "value": "2025-03-01"
+        }
+    ],
+    "pathParameters": [],
+    "headers": [
+        {
+            "name": "Accept",
+            "value": "application/vnd.github+json"
+        },
+        {
+            "name": "X-GitHub-Api-Version",
+            "value": "2022-11-28"
+        }
+    ],
+    "authentication": {
+        "type": "bearer",
+        "token": "{{ghtoken}}",
+        "prefix": "Bearer"
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "_type": "request",
+    "method": "GET",
+    "body": {
+        "mimeType": "No Body"
+    },
+    "url": "https://api.github.com/repos/astral-sh/ruff/events",
+    "sortOrder": 4,
+    "parameters": [],
+    "pathParameters": [],
+    "headers": [
+        {
+            "name": "Accept",
+            "value": "application/vnd.github+json"
+        },
+        {
+            "name": "X-GitHub-Api-Version",
+            "value": "2022-11-28"
+        }
+    ],
+    "authentication": {
+        "type": "bearer",
+        "token": "{{ghtoken}}",
+        "prefix": "Bearer"
+    }
+}
