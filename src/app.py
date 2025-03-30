@@ -6,7 +6,7 @@ from src.config import config
 from src.database.connection import get_session
 from src.gh.models import Event
 from src.gh.event import fetch_gh_to_local_db
-from src.stats.event import get_stats, fetch_repos
+from src.stats.event import get_stats, fetch_repos, local_cache_stats
 
 
 @asynccontextmanager
@@ -27,7 +27,8 @@ def home(session: Session = Depends(get_session)):
         "info": f"Hello world from {config.app_name}!",
         "example_paths": [
             "/",
-            "stats/{org}/{repo}/{event_type}",
+            "/stats",
+            "/stats/{org}/{repo}/{event_type}",
             "/fetch",
             "/docs",
             "/redoc",
@@ -38,8 +39,13 @@ def home(session: Session = Depends(get_session)):
     return result
 
 
+@app.get("/stats/")
+def stats_all(session: Session = Depends(get_session)) -> list[tuple[str, int]]:
+    return local_cache_stats(session)
+
+
 @app.get("/stats/{org}/{repo}/{type}")
-def stats(
+def stats_repo(
     org: str, repo: str, type: str, session: Session = Depends(get_session)
 ) -> dict:
     """

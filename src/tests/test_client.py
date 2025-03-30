@@ -13,7 +13,7 @@ def test_root(client: TestClient):
     assert response.status_code == 200
     data = response.json()
     assert "Hello" in data["info"]
-    assert len(data["example_paths"]) == 5
+    assert len(data["example_paths"]) == 6
 
 
 def test_empty_db(client: TestClient):

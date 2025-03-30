@@ -9,6 +9,14 @@ def fetch_repos(session: Session) -> list[str]:
     return [row[0] for row in results]
 
 
+def local_cache_stats(session: Session) -> list[tuple[str, int]]:
+    query = text("SELECT repo , count(*) FROM event GROUP BY repo")
+    results = session.connection().execute(query).fetchall()
+    print(results)
+
+    return results
+
+
 def fetch_events(
     session: Session, repo: str, event_type: str, first_date: datetime | None = None
 ) -> list[datetime]:
