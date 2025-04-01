@@ -58,6 +58,7 @@ When you cal `/stats/` the calculation is only from local DB.
 - [ ] More tests
 - [ ] Cron fetching of data
 - [ ] Naming consistency
+- [ ] Add `imported_at` to the Event model
 
 ---
 
